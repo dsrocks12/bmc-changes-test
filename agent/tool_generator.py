@@ -206,12 +206,17 @@ def make_api_caller(api_def: dict, registry: dict):
         except json.JSONDecodeError:
             return f"ERROR: Could not parse parameters. Expected JSON, got: {params_json}"
 
+        global_params = registry.get("global_parameters", {}) or {}
+        global_server = global_params.get("server")
+        if global_server and any(
+            p.get("name") == "server" for p in api_def.get("parameters", [])
+        ):
+            params["server"] = global_server
+
         # Split params by location + apply registry defaults for anything missing.
         path_params: dict = {}
         query_params: dict = {}
         body_params: dict = {}
-
-        global_params = registry.get("global_parameters", {}) or {}
 
         for p in api_def.get("parameters", []):
             name = p["name"]

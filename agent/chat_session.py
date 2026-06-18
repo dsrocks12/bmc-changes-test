@@ -190,17 +190,17 @@ class AutomationChatSession:
         api = self.api_map[self.pipeline_ctx.api_id]
         req_names = _required_param_names(api)
         if req_names:
+            supplemental = self.pipeline_ctx.supplemental_query.strip()
             extracted = phase2_extract_params(
-                self.pipeline_ctx.source_text,
+                self.pipeline_ctx.original_query,
                 api,
                 self.pipeline_ctx.raw_params,
                 allowed_names=req_names,
                 apply_confidence_filters=False,
                 latest_followup_line=user_input,
+                followup_text=supplemental,
             )
-            extracted = _drop_unmentioned_enums(
-                api, extracted, self.pipeline_ctx.source_text
-            )
+            extracted = _drop_unmentioned_enums(api, extracted, supplemental)
             self.pipeline_ctx.raw_params.update(extracted)
 
         self.state = "PIPELINE"

@@ -26,6 +26,8 @@ _GENERIC_TOKENS = frozenset({
 _PHRASE_HINTS: tuple[tuple[str, tuple[str, ...]], ...] = (
     ("connection profile", ("connection", "profile")),
     ("connection profiles", ("connection", "profile")),
+    ("agentless host", ("agentless", "host")),
+    ("agentless hosts", ("agentless", "host")),
     ("agent param", ("agent", "parameter")),
     ("agent params", ("agent", "parameter")),
     ("agent parameter", ("agent", "parameter")),
@@ -69,6 +71,10 @@ def score_api_match(user_input: str, api: dict) -> float:
     for phrase, required_tokens in _PHRASE_HINTS:
         if phrase in norm and all(t in corpus for t in required_tokens):
             score += 4.0
+
+    # Strong signal: agentless host(s) queries → agentless hosts API, not agent params.
+    if "agentless" in norm and "agentless" in corpus:
+        score += 3.0
 
     # Strong match when user text contains the exact registry id.
     api_id = api.get("id") or ""

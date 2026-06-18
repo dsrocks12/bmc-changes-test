@@ -26,6 +26,7 @@ from agent import (
     _required_param_names,
     apply_conversion_and_reconcile,
     apply_optional_defaults,
+    apply_registry_global_server,
     format_param_ask,
     get_missing_params,
     latest_supplemental_line,
@@ -245,14 +246,16 @@ def _step_extract_required(ctx: PipelineContext, deps: PipelineDeps) -> StepResu
 
     if req_names:
         extracted = phase2_extract_params(
-            ctx.source_text,
+            ctx.original_query,
             api,
             ctx.raw_params,
             allowed_names=req_names,
             apply_confidence_filters=strict_filters,
             latest_followup_line=latest_line,
+            followup_text=ctx.supplemental_query.strip() if is_followup else None,
         )
-        extracted = _drop_unmentioned_enums(api, extracted, ctx.source_text)
+        enum_text = ctx.supplemental_query.strip() if is_followup else ctx.original_query
+        extracted = _drop_unmentioned_enums(api, extracted, enum_text)
         ctx.raw_params.update(extracted)
 
     req_miss, _ = get_missing_params(api, ctx.raw_params)
@@ -343,7 +346,9 @@ def _step_convert_params(ctx: PipelineContext, deps: PipelineDeps) -> StepResult
 
 def _step_execute(ctx: PipelineContext, deps: PipelineDeps) -> StepResult:
     api = deps.api_map[ctx.api_id]
-    safe_params = _enforce_types(api, ctx.converted_params)
+    final_params = dict(ctx.converted_params)
+    apply_registry_global_server(api, final_params)
+    safe_params = _enforce_types(api, final_params)
     try:
         raw = deps.tool_map[api["id"]].invoke(json.dumps(safe_params))
         ctx.api_response = raw

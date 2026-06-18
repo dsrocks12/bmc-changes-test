@@ -32,11 +32,20 @@ class IntentParser:
             IntentPattern(
                 name="get_server_agentless_hosts",
                 pattern=re.compile(
-                    r"(get|show|list|fetch)\s+(all\s+)?(the\s+)?agentless\s+hosts?(\s+(for|of|on)\s+(server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+))?",
+                    r"(get|show|list|fetch)\s+(?:me\s+)?(?:all\s+)?(?:the\s+)?agentless\s+hosts?(\s+(?:for|of|on)\s+(?:server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+))?",
                     re.IGNORECASE,
                 ),
                 explanation="Detected a request to fetch server agentless hosts.",
                 confidence=0.95,
+            ),
+            IntentPattern(
+                name="get_server_agentless_hosts",
+                pattern=re.compile(
+                    r"(get|show|list|fetch)\s+(?:me\s+)?(?:the\s+)?server\s+agentless\s+hosts?(\s+(?:for|of|on)\s+(?:server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+))?",
+                    re.IGNORECASE,
+                ),
+                explanation="Detected server-first phrasing for agentless hosts.",
+                confidence=0.96,
             ),
             IntentPattern(
                 name="set_server_desired_state",
@@ -59,10 +68,19 @@ class IntentParser:
             IntentPattern(
                 name="analyze_agent_communication",
                 pattern=re.compile(
-                    r"(analyze|check|test)\s+(the\s+)?(communication|connection)\s+(between\s+)?(server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+)\s+(and\s+)?(agent\s+)?(?P<agent>[a-zA-Z0-9_\-\.]+)",
+                    r"(analyze|check|test)\s+(?:the\s+)?(?:communication|connection)\s+for\s+(?:agent\s+)?(?P<agent>[a-zA-Z0-9_\-\.]+)(?:\s+on\s+(?:server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+))?",
                     re.IGNORECASE,
                 ),
-                explanation="Detected a request to analyze agent communication.",
+                explanation="Detected analyze communication for a specific agent (server optional).",
+                confidence=0.97,
+            ),
+            IntentPattern(
+                name="analyze_agent_communication",
+                pattern=re.compile(
+                    r"(analyze|check|test)\s+(?:the\s+)?(?:communication|connection)\s+between\s+(?:server\s+)?(?P<server>[a-zA-Z0-9_\-\.]+)\s+and\s+(?:agent\s+)?(?P<agent>[a-zA-Z0-9_\-\.]+)",
+                    re.IGNORECASE,
+                ),
+                explanation="Detected analyze communication between server and agent.",
                 confidence=0.95,
             ),
             # --- Standard ctm-aapi patterns ---
@@ -384,12 +402,20 @@ def map_nlp_to_api(intent: IntentResult, valid_api_ids: set) -> Optional[dict]:
     if not mapped_api or mapped_api not in valid_api_ids:
         return None
 
+    # Grammar words must never become path parameters (e.g. server="for").
+    _entity_stopwords = frozenset({
+        "for", "and", "the", "on", "to", "from", "with", "of", "in", "a", "an",
+        "is", "at", "by", "or", "as",
+    })
+
     # Map entity parameters to those expected by registry APIs
     mapped_entities = {}
     
     # 1. server -> server
     if "server" in entities:
-        mapped_entities["server"] = entities["server"]
+        server_val = str(entities["server"]).strip()
+        if server_val.lower() not in _entity_stopwords:
+            mapped_entities["server"] = server_val
 
     # 2. agent -> agent
     if "agent" in entities:
