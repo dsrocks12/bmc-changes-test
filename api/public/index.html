@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BMC Control-M Automation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand">BMC <span>Control-M</span></div>
+    <nav class="site-nav">
+      <a href="#platform">Platform</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#automation">Automation</a>
+      <button class="button button-secondary" id="chatToggle">Chat</button>
+    </nav>
+  </header>
+
+  <main class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Enterprise Workload Automation</p>
+        <h1>Control-M for hybrid cloud orchestration</h1>
+        <p class="hero-text">Manage, secure, and automate business workflows across applications, data, and infrastructure with a modern Control-M-inspired experience.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#capabilities">Explore Capabilities</a>
+          <button class="button button-secondary" id="chatToggleSecondary">Open Chat</button>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="card card-glow">
+          <h2>Control your enterprise</h2>
+          <p>Accelerate delivery with end-to-end automation that spans cloud, on-prem, and containerized workloads.</p>
+          <ul>
+            <li>Hybrid cloud scheduling</li>
+            <li>Event-driven orchestration</li>
+            <li>Operational visibility</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="capabilities" class="endpoint-grid">
+      <article class="endpoint-card" tabindex="0" aria-expanded="false">
+        <div class="card-header">
+          <h3>Workflow orchestration</h3>
+          <span class="expand-icon">+</span>
+        </div>
+        <p>Define, schedule, and automate complex business processes from one central platform.</p>
+        <div class="card-details">
+          <p>Drill into dependencies, SLA windows, and automated recovery actions with enterprise-grade workflow controls.</p>
+        </div>
+      </article>
+      <article class="endpoint-card" tabindex="0" aria-expanded="false">
+        <div class="card-header">
+          <h3>Hybrid operations</h3>
+          <span class="expand-icon">+</span>
+        </div>
+        <p>Coordinate jobs across cloud, mainframe, and distributed environments with unified control.</p>
+        <div class="card-details">
+          <p>Connect on-prem, public cloud, and container workloads while preserving security and operational consistency.</p>
+        </div>
+      </article>
+      <article class="endpoint-card" tabindex="0" aria-expanded="false">
+        <div class="card-header">
+          <h3>Visibility & analytics</h3>
+          <span class="expand-icon">+</span>
+        </div>
+        <p>Monitor jobs, SLA status, and service health with real-time insights and alerts.</p>
+        <div class="card-details">
+          <p>Review execution trends, incident snapshots, and performance metrics to keep operations on target.</p>
+        </div>
+      </article>
+      <article class="endpoint-card" tabindex="0" aria-expanded="false">
+        <div class="card-header">
+          <h3>Secure automation</h3>
+          <span class="expand-icon">+</span>
+        </div>
+        <p>Control access, enforce policies, and keep business-critical jobs aligned with compliance.</p>
+        <div class="card-details">
+          <p>Enable role-based workflows, audit-ready logging, and policy-aware automation across your operations.</p>
+        </div>
+      </article>
+    </section>
+
+    <section id="automation" class="feature-section">
+      <div class="feature-group">
+        <h2>Designed for enterprise-ready automation</h2>
+        <p>Build resilience and accelerate operations with a scalable automation platform tailored for digital transformation.</p>
+      </div>
+      <div class="feature-grid">
+        <article class="feature-card" tabindex="0" aria-expanded="false">
+          <div class="card-header">
+            <h3>Automated scheduling</h3>
+            <span class="expand-icon">+</span>
+          </div>
+          <p>Schedule thousands of jobs in one place with calendar, event, and dependency controls.</p>
+          <div class="card-details">
+            <p>Use built-in scheduling patterns, event-triggered execution, and predictive timing to keep delivery on schedule.</p>
+          </div>
+        </article>
+        <article class="feature-card" tabindex="0" aria-expanded="false">
+          <div class="card-header">
+            <h3>Service orchestration</h3>
+            <span class="expand-icon">+</span>
+          </div>
+          <p>Combine batch, ETL, cloud, and application workflows into a seamless automated pipeline.</p>
+          <div class="card-details">
+            <p>Visualize job dependencies and sequence services across technologies with a simplified, operationally-aware flow.</p>
+          </div>
+        </article>
+        <article class="feature-card" tabindex="0" aria-expanded="false">
+          <div class="card-header">
+            <h3>Self-healing operations</h3>
+            <span class="expand-icon">+</span>
+          </div>
+          <p>Respond automatically to failures and reroute workflows without manual intervention.</p>
+          <div class="card-details">
+            <p>Enable intelligent retries, alternate paths, and incident triggers so operations stay resilient under load.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <div id="bmc-chatbot" data-api-url="/api/chat"></div>
+
+  <script src="chatbot-widget.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

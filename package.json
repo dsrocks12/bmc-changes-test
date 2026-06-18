@@ -1,0 +1,15 @@
+{
+  "name": "bmc-tinylama",
+  "version": "1.0.0",
+  "description": "BMC Control-M automation UI + TinyLlama LangChain agent",
+  "scripts": {
+    "install:api": "cd api && npm install",
+    "start:api": "cd api && node index.js",
+    "install:agent": "node scripts/install-agent.js",
+    "start:agent": "node scripts/start-agent.js",
+    "start:agent:cli": "node scripts/start-agent-cli.js",
+    "start": "node scripts/start-all.js",
+    "dev": "node scripts/start-all.js",
+    "setup": "npm run install:api && npm run install:agent"
+  }
+}

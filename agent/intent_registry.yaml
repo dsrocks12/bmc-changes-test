@@ -1,0 +1,80 @@
+# ============================================================
+#  Top-level intent registry
+#  Runs BEFORE api_registry.yaml API selection (Phase 1)
+# ============================================================
+#
+# Flow:  user message → top intent (here) → tool_call → api_registry Phase 1
+#
+#   chitchat   → friendly reply, stay IDLE (no API)
+#   help       → list capabilities from api_registry, stay IDLE
+#   tool_call  → pick API from api_registry.yaml
+
+intents:
+  - id: chitchat
+    name: Casual conversation
+    description: >
+      Greetings, thanks, goodbye, or small talk. The user is NOT asking to
+      run a BMC automation API or provide server/agent/parameters.
+    triggers:
+      - hello
+      - hi
+      - hey
+      - hiya
+      - good morning
+      - good afternoon
+      - good evening
+      - how are you
+      - thanks
+      - thank you
+      - thx
+      - bye
+      - goodbye
+      - see you
+    # Greeting text is generated at runtime from api_registry.yaml (see build_chitchat_reply).
+
+  - id: help
+    name: Help / capabilities
+    description: >
+      User asks what the assistant can do, which commands or APIs are
+      available, or how to use the bot.
+    triggers:
+      - help
+      - what can you do
+      - what do you do
+      - what are you
+      - list commands
+      - list apis
+      - show apis
+      - capabilities
+      - how do i use
+      - how to use
+
+  - id: tool_call
+    name: Automation API request
+    description: >
+      User wants to perform a concrete BMC automation action: list or search
+      resources, get configuration, set a parameter, etc. Route to API
+      selection from api_registry.yaml.
+    triggers: []
+
+  - id: faq_question
+    name: FAQ Question
+    description: >
+      User asks a general technical or domain question about Control-M or the automation system, 
+      rather than asking to execute an API or asking for help on bot usage.
+    triggers:
+      - how do i
+      - what is
+      - what are
+      - why
+      - where
+      - can i
+      - can you
+      - can u
+      - tell me
+      - explain
+      - does
+      - is there
+      - who
+      - question
+      - how much  

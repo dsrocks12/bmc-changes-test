@@ -1,0 +1,15 @@
+{
+  "name": "bmc-control-m-ui",
+  "version": "1.0.0",
+  "description": "BMC Control-M automation landing page and chat widget",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
